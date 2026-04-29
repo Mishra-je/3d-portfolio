@@ -181,6 +181,95 @@
 
 // 3rd way
 
+// import React, { Suspense, useEffect, useState } from "react";
+// import { Canvas } from "@react-three/fiber";
+// import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
+
+// import CanvasLoader from "../layout/Loader";
+
+// // 3D Model Component
+// const Computers: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
+//   const computer = useGLTF("/desktop_pc/scene.gltf"); // ✅ FIXED PATH
+
+//   return (
+//     <mesh>
+//       <hemisphereLight intensity={0.15} groundColor="black" />
+      
+//       <spotLight
+//         position={[-20, 50, 10]}
+//         angle={0.12}
+//         penumbra={1}
+//         intensity={1}
+//         castShadow
+//         shadow-mapSize={1024}
+//       />
+
+//       <pointLight intensity={1} />
+
+//       <primitive
+//         object={computer.scene}
+//         scale={isMobile ? 0.6 : 0.75}
+//         position={isMobile ? [0, -2.5, -2] : [0, -4.25, -1.5]}
+//         rotation={[-0.01, -0.2, -0.1]}
+//       />
+//     </mesh>
+//   );
+// };
+
+// // Main Canvas Component
+// const ComputersCanvas = () => {
+//   const [isMobile, setIsMobile] = useState(false);
+
+//   useEffect(() => {
+//     // ✅ Better device detection (instead of screen width)
+//     const checkMobile = () => {
+//       const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+//       setIsMobile(mobile);
+//     };
+
+//     checkMobile();
+//   }, []);
+
+//   return (
+//     <>
+//       {isMobile ? (
+//         // ✅ Fallback for mobile (important)
+//         <div className="w-full flex justify-center items-center">
+//           <img
+//             src="/hero.png"   // 👉 add your image in public folder
+//             alt="3D preview"
+//             className="w-[80%] h-auto object-contain"
+//           />
+//         </div>
+//       ) : (
+//         // ✅ 3D Canvas for desktop
+//         <Canvas
+//           frameloop="always"
+//           shadows
+//           dpr={[1, 2]}
+//           camera={{ position: [20, 3, 5], fov: 25 }}
+//           gl={{ preserveDrawingBuffer: true }}
+//         >
+//           <Suspense fallback={<CanvasLoader />}>
+//             <OrbitControls
+//               enablePan={false}
+//               enableZoom={false}
+//               maxPolarAngle={Math.PI / 2}
+//               minPolarAngle={Math.PI / 2}
+//             />
+//             <Computers isMobile={isMobile} />
+//           </Suspense>
+//           <Preload all />
+//         </Canvas>
+//       )}
+//     </>
+//   );
+// };
+
+// export default ComputersCanvas;
+
+
+
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
@@ -189,12 +278,17 @@ import CanvasLoader from "../layout/Loader";
 
 // 3D Model Component
 const Computers: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
-  const computer = useGLTF("/desktop_pc/scene.gltf"); // ✅ FIXED PATH
-
+  
+  // const computer = useGLTF(
+  //   new URL("../../desktop_pc/scene.gltf", import.meta.url).href
+  // );
+const computer = useGLTF(
+  new URL("/desktop_pc/scene.gltf", window.location.origin).href
+);
   return (
     <mesh>
       <hemisphereLight intensity={0.15} groundColor="black" />
-      
+
       <spotLight
         position={[-20, 50, 10]}
         angle={0.12}
@@ -221,7 +315,7 @@ const ComputersCanvas = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // ✅ Better device detection (instead of screen width)
+    
     const checkMobile = () => {
       const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       setIsMobile(mobile);
@@ -233,16 +327,16 @@ const ComputersCanvas = () => {
   return (
     <>
       {isMobile ? (
-        // ✅ Fallback for mobile (important)
+        // ✅ Fallback for mobile
         <div className="w-full flex justify-center items-center">
           <img
-            src="/hero.png"   // 👉 add your image in public folder
+            src="/hero.png"
             alt="3D preview"
             className="w-[80%] h-auto object-contain"
           />
         </div>
       ) : (
-        // ✅ 3D Canvas for desktop
+        // ✅ Desktop 3D Canvas
         <Canvas
           frameloop="always"
           shadows
@@ -259,6 +353,7 @@ const ComputersCanvas = () => {
             />
             <Computers isMobile={isMobile} />
           </Suspense>
+
           <Preload all />
         </Canvas>
       )}
