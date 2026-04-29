@@ -6,7 +6,7 @@ Fully responsive and interactive portfolio to showcase projects and skills.
 ---
 
 ## 🌐 Live Demo
-👉 https://your-portfolio-link.vercel.app/
+👉 https://mishra-sachin.vercel.app/
 
 ---
 
@@ -32,7 +32,7 @@ Fully responsive and interactive portfolio to showcase projects and skills.
 ## ⚙️ Installation
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/Mishra-je/3d-portfolio.git
 cd your-repo-name
 npm install
 npm run dev
